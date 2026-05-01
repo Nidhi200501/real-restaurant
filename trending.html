@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Most Ordered Today – FlameBite</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .trending-hero {
+      padding: 130px 5% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trending-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 100%;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(255,69,0,0.12) 0%, transparent 60%),
+        radial-gradient(circle at 80% 50%, rgba(255,179,71,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,50,50,0.15);
+      border: 1px solid rgba(255,50,50,0.35);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      color: #FF6B6B;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .live-dot {
+      width: 8px; height: 8px;
+      background: #FF4444;
+      border-radius: 50%;
+      animation: livePulse 1s ease-in-out infinite;
+    }
+
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── TOP 3 PODIUM ── */
+    .podium-section {
+      padding: 20px 5% 60px;
+    }
+
+    .podium-label {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .podium-grid {
+      display: flex;
+      gap: 20px;
+      align-items: flex-end;
+      justify-content: center;
+      max-width: 900px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .podium-card {
+      flex: 1;
+      min-width: 220px;
+      max-width: 280px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .podium-card:hover {
+      transform: translateY(-12px) scale(1.02);
+    }
+
+    .podium-card.rank-1 {
+      border: 2px solid rgba(255,215,0,0.6);
+      box-shadow: 0 0 40px rgba(255,215,0,0.2), 0 20px 60px rgba(0,0,0,0.4);
+      transform: scale(1.05);
+    }
+
+    .podium-card.rank-1:hover {
+      transform: translateY(-12px) scale(1.07);
+    }
+
+    .podium-card.rank-2 {
+      border: 2px solid rgba(192,192,192,0.4);
+      box-shadow: 0 0 30px rgba(192,192,192,0.1);
+    }
+
+    .podium-card.rank-3 {
+      border: 2px solid rgba(205,127,50,0.4);
+      box-shadow: 0 0 30px rgba(205,127,50,0.1);
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      z-index: 3;
+      backdrop-filter: blur(4px);
+    }
+
+    .rank-1 .rank-badge { background: rgba(255,215,0,0.25); border: 2px solid gold; }
+    .rank-2 .rank-badge { background: rgba(192,192,192,0.2); border: 2px solid silver; }
+    .rank-3 .rank-badge { background: rgba(205,127,50,0.2); border: 2px solid #CD7F32; }
+
+    .podium-img-wrap {
+      position: relative;
+      padding-top: 70%;
+      overflow: hidden;
+    }
+
+    .podium-img-wrap img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .podium-card:hover .podium-img-wrap img { transform: scale(1.1); }
+
+    .podium-img-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(transparent, var(--card-bg));
+    }
+
+    .podium-body { padding: 16px; }
+
+    .podium-name {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .podium-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .podium-price { color: var(--gold); font-weight: 800; font-size: 18px; }
+
+    .orders-count {
+      background: rgba(255,69,0,0.15);
+      border: 1px solid rgba(255,69,0,0.3);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--ember);
+      font-weight: 600;
+    }
+
+    .podium-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* ── TRENDING GRID ── */
+    .trending-section {
+      padding: 20px 5% 80px;
+    }
+
+    .trending-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 24px;
+    }
+
+    .trending-card {
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .trending-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255,69,0,0.4);
+      box-shadow: 0 20px 60px rgba(255,69,0,0.2);
+    }
+
+    .trending-card.hot-item {
+      border-color: rgba(255,69,0,0.35);
+      box-shadow: 0 0 20px rgba(255,69,0,0.1);
+    }
+
+    .hot-label {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: linear-gradient(135deg, var(--fire), var(--gold));
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      z-index: 3;
+      box-shadow: 0 2px 10px rgba(255,69,0,0.4);
+    }
+
+    .trend-rank {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0,0,0,0.7);
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      z-index: 3;
+      backdrop-filter: blur(4px);
+    }
+
+    .trending-card .card-img-wrap { padding-top: 60%; }
+
+    /* Timer strip */
+    .timer-strip {
+      margin: 0 5% 40px;
+      background: linear-gradient(135deg, rgba(255,69,0,0.1), rgba(255,179,71,0.05));
+      border: 1px solid rgba(255,69,0,0.25);
+      border-radius: 16px;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .timer-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .timer-icon { font-size: 32px; }
+
+    .timer-text h3 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+    .timer-text span { font-size: 13px; color: var(--muted); }
+
+    .countdown {
+      display: flex;
+      gap: 12px;
+    }
+
+    .count-box {
+      background: var(--dark3);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      text-align: center;
+      min-width: 55px;
+    }
+
+    .count-num {
+      display: block;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ember);
+      line-height: 1;
+    }
+
+    .count-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    @media (max-width: 768px) {
+      .podium-grid { flex-direction: column; align-items: center; }
+      .podium-card { max-width: 100%; width: 100%; }
+      .podium-card.rank-1 { transform: none; order: -1; }
+      .timer-strip { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🔥</div>
+    <span class="nav-logo-text">FlameBite</span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="menu.html">Our Menu</a></li>
+    <li><a href="trending.html" class="active">Most Ordered Today</a></li>
+    <li><a href="contact.html">Find Us</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="nav-cart-btn" onclick="openCart()">
+      🛒 Cart <span class="cart-count" style="display:none">0</span>
+    </button>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- CART PANEL -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <h2>🛒 Your Cart</h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total Amount</span>
+      <strong id="cart-total-amount">₹0</strong>
+    </div>
+    <button class="checkout-btn" onclick="whatsappOrder('my cart items')">💬 Order via WhatsApp</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="trending-hero">
+  <div class="live-badge">
+    <div class="live-dot"></div>
+    LIVE ORDERS UPDATING
+  </div>
+  <h1 class="section-title" style="font-size:clamp(36px,5vw,60px)">Most Ordered Today</h1>
+  <p class="section-sub" style="font-size:16px">Real-time data from our kitchen. These are flying off the shelves!</p>
+</div>
+
+<!-- TIMER STRIP -->
+<div class="timer-strip">
+  <div class="timer-left">
+    <div class="timer-icon">⏳</div>
+    <div class="timer-text">
+      <h3>Today's Special Ends In</h3>
+      <span>Order now to get today's best prices</span>
+    </div>
+  </div>
+  <div class="countdown">
+    <div class="count-box"><span class="count-num" id="cd-h">08</span><span class="count-label">Hours</span></div>
+    <div class="count-box"><span class="count-num" id="cd-m">34</span><span class="count-label">Mins</span></div>
+    <div class="count-box"><span class="count-num" id="cd-s">52</span><span class="count-label">Secs</span></div>
+  </div>
+</div>
+
+<!-- TOP 3 PODIUM -->
+<div class="podium-section">
+  <div class="podium-label">
+    <h2 class="section-title">🏆 Top 3 Dishes</h2>
+    <p class="section-sub">The undisputed champions of today's menu</p>
+  </div>
+  <div class="podium-grid" id="podium-grid"></div>
+</div>
+
+<!-- FULL TRENDING GRID -->
+<div class="trending-section">
+  <h2 class="section-title" style="margin-bottom:8px">🔥 All Trending Dishes</h2>
+  <p class="section-sub">Every dish your neighbours are ordering right now</p>
+  <div class="trending-grid" id="trending-grid"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="nav-logo-text">FlameBite</span>
+      <p>Real food, real fast, real good.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Full Menu</a>
+      <a href="contact.html">Find Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Order Now</h4>
+      <a href="https://wa.me/919322531740" target="_blank">💬 WhatsApp</a>
+      <a href="tel:9322531740">📞 Call Us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 FlameBite. All rights reserved.</div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+// Countdown timer
+function updateCountdown() {
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(23, 59, 59, 0);
+  const diff = midnight - now;
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// Top 3 podium
+const top3 = trendingDishes.slice(0,3);
+const ranks = ['🥇', '🥈', '🥉'];
+const rankClass = ['rank-1', 'rank-2', 'rank-3'];
+
+// Show rank-2 first, rank-1 center, rank-3 last
+const podiumOrder = [1, 0, 2];
+
+document.getElementById('podium-grid').innerHTML = podiumOrder.map(idx => {
+  const d = top3[idx];
+  const isFav = favorites.includes(d.id);
+  return `
+    <div class="podium-card ${rankClass[idx]}">
+      <div class="rank-badge">${ranks[idx]}</div>
+      <div class="podium-img-wrap">
+        <img src="${d.img}" alt="${d.name}" 
+          onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80'"
+          loading="lazy">
+      </div>
+      <div class="podium-body">
+        <div class="podium-name">${d.name}</div>
+        <div class="podium-meta">
+          <div class="podium-price">₹${d.price}</div>
+          <div class="orders-count">🔥 ${d.orders} orders</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">${d.desc}</div>
+        <div class="podium-actions">
+          <button class="btn-order" style="flex:1" onclick="whatsappOrder('${d.name}')">📱 Order Now</button>
+          <button class="btn-cart" onclick='addToCart(${JSON.stringify(d)})'>🛒</button>
+        </div>
+      </div>
+    </div>
+  `;
+}).join('');
+
+// Full trending grid (items 4+)
+document.getElementById('trending-grid').innerHTML = trendingDishes.map((d, i) => {
+  const isFav = favorites.includes(d.id);
+  const isHot = i < 6;
+  return `
+    <div class="trending-card ${isHot ? 'hot-item' : ''}">
+      <div class="trend-rank">#${i+1}</div>
+      ${isHot ? '<div class="hot-label">🔥 Hot</div>' : ''}
+      <div class="card-img-wrap">
+        <img src="${d.img}" alt="${d.name}"
+          onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80'"
+          loading="lazy">
+        <div class="card-badge ${d.type}"></div>
+        <button class="fav-btn ${isFav ? 'active' : ''}" data-fav="${d.id}" onclick="toggleFav('${d.id}')">♥</button>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${d.name}</div>
+        <div class="card-desc">${d.desc}</div>
+        <div class="card-meta">
+          <div class="card-price">₹${d.price}</div>
+          <div class="orders-count" style="font-size:11px;">🔥 ${d.orders}</div>
+        </div>
+        <div class="card-rating" style="margin-bottom:10px">⭐ ${d.rating}</div>
+        <div class="card-actions">
+          <button class="btn-order" onclick="whatsappOrder('${d.name}')">📱 Order Now</button>
+          <button class="btn-cart" onclick='addToCart(${JSON.stringify(d)})'>🛒 Add</button>
+        </div>
+      </div>
+    </div>
+  `;
+}).join('');
+</script>
+</body>
+</html>

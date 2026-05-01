@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlameBite – Delicious Food Delivered Fast</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.05);
+      animation: heroZoom 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroZoom {
+      from { transform: scale(1.0); }
+      to { transform: scale(1.1); }
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(10,10,15,0.95) 0%,
+        rgba(10,10,15,0.75) 45%,
+        rgba(255,69,0,0.08) 75%,
+        transparent 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 5%;
+      padding-top: 80px;
+      max-width: 700px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,69,0,0.15);
+      border: 1px solid rgba(255,69,0,0.3);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.6s ease 0.2s both;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(38px, 6vw, 80px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      animation: fadeInUp 0.6s ease 0.4s both;
+    }
+
+    .hero-title .fire-text {
+      background: linear-gradient(135deg, var(--fire) 0%, var(--gold) 60%, #FFF176 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(15px, 2vw, 18px);
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+      margin-bottom: 50px;
+      max-width: 480px;
+      animation: fadeInUp 0.6s ease 0.6s both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.6s ease 0.8s both;
+      margin-top: 0px;
+      width: fit-content;
+    }
+
+    .hero-btn-primary {
+      padding: 16px 36px;
+      background: linear-gradient(135deg, var(--fire), var(--gold));
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 30px rgba(255,69,0,0.5);
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite 1.5s;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 8px 30px rgba(255,69,0,0.5); }
+      50% { box-shadow: 0 8px 50px rgba(255,69,0,0.8), 0 0 0 10px rgba(255,69,0,0.05); }
+    }
+
+    .hero-btn-primary:hover {
+      transform: translateY(-3px) scale(1.04);
+    }
+
+    .hero-btn-secondary {
+      padding: 16px 36px;
+      background: transparent;
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 50px;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+
+    .hero-btn-secondary:hover {
+      border-color: var(--ember);
+      background: rgba(255,69,0,0.15);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      animation: fadeInUp 0.6s ease 1s both;
+      z-index: 2;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--ember), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── CHEF ANIMATION ── */
+    .chef-wrap {
+      position: absolute;
+      right: 5%;
+      bottom: 0;
+      width: min(45%, 500px);
+      z-index: 2;
+      animation: chefFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 20px 60px rgba(255,69,0,0.3));
+    }
+
+    @keyframes chefFloat {
+      0%, 100% { transform: translateY(0px) rotate(-1deg); }
+      50% { transform: translateY(-20px) rotate(1deg); }
+    }
+
+    .chef-glow {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 60px;
+      background: radial-gradient(ellipse, rgba(255,100,0,0.4) 0%, transparent 70%);
+      filter: blur(20px);
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.6; transform: translateX(-50%) scaleX(1); }
+      50% { opacity: 1; transform: translateX(-50%) scaleX(1.2); }
+    }
+
+    #chef-canvas {
+      width: 100%;
+      height: auto;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── FEATURES STRIP ── */
+    .features-strip {
+      background: var(--dark2);
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 30px 5%;
+    }
+
+    .features-grid {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .feature-icon {
+      width: 50px; height: 50px;
+      background: linear-gradient(135deg, rgba(255,69,0,0.15), rgba(255,179,71,0.1));
+      border: 1px solid rgba(255,69,0,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .feature-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .feature-text span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── POPULAR SECTION ── */
+    .popular-section {
+      padding: 80px 5%;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+
+    .view-all-link {
+      color: var(--ember);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,107,53,0.3);
+      padding-bottom: 2px;
+      transition: all 0.2s;
+    }
+
+    .view-all-link:hover { color: var(--gold); border-color: var(--gold); }
+
+    .popular-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── PROMO BANNER ── */
+    .promo-banner {
+      margin: 0 5% 80px;
+      background: linear-gradient(135deg, #1a0a00 0%, #2d1200 40%, #1a0a00 100%);
+      border: 1px solid rgba(255,69,0,0.3);
+      border-radius: 24px;
+      padding: 50px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .promo-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,69,0,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .promo-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(24px, 3vw, 38px);
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, white, var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .promo-text p {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    .promo-emoji {
+      font-size: 80px;
+      animation: wiggle 2s ease-in-out infinite;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-5deg) scale(1); }
+      50% { transform: rotate(5deg) scale(1.1); }
+    }
+
+    @media (max-width: 768px) {
+      .hero-stats { gap: 20px; }
+      .chef-wrap { width: 70%; right: 50%; transform: translateX(50%); bottom: auto; top: 80px; opacity: 0.3; }
+      .promo-banner { padding: 36px 24px; flex-direction: column; gap: 24px; text-align: center; }
+      .promo-emoji { font-size: 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🔥</div>
+    <span class="nav-logo-text">FlameBite</span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="menu.html">Our Menu</a></li>
+    <li><a href="trending.html">Most Ordered Today</a></li>
+    <li><a href="contact.html">Find Us</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="nav-cart-btn" onclick="openCart()">
+      🛒 Cart <span class="cart-count" style="display:none">0</span>
+    </button>
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <h2>🛒 Your Cart</h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="empty-cart"><div class="empty-icon">🛒</div><p>Your cart is empty</p></div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total Amount</span>
+      <strong id="cart-total-amount">₹0</strong>
+    </div>
+    <button class="checkout-btn" onclick="whatsappOrder('my cart items')">💬 Order via WhatsApp</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">🔥 Mumbai's #1 Food Destination</div>
+    <h1 class="hero-title">
+      Delicious Food<br>
+      <span class="fire-text">Delivered Fast</span>
+    </h1>
+    <p class="hero-sub">
+      From sizzling biryanis to golden dosas — every dish crafted with passion,
+      served fresh to your doorstep. Experience flavors that ignite your soul.
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">500+</span>
+        <span class="stat-label">Dishes</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">4.9⭐</span>
+        <span class="stat-label">Rating</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">30 min</span>
+        <span class="stat-label">Delivery</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">10k+</span>
+        <span class="stat-label">Orders</span>
+      </div>
+    </div>
+    <div class="hero-buttons">
+      <a href="menu.html" class="hero-btn-primary">🍽️ Explore Menu</a>
+      <a href="trending.html" class="hero-btn-secondary">⚡ Order Now</a>
+    </div>
+  </div>
+
+  <!-- 3D CHEF -->
+  <div class="chef-wrap">
+    <div class="chef-glow"></div>
+    <canvas id="chef-canvas" width="500" height="600"></canvas>
+  </div>
+</section>
+
+<!-- FEATURES STRIP -->
+<div class="features-strip">
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-text">
+        <strong>30-Min Delivery</strong>
+        <span>Hot & fresh to your door</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">👨‍🍳</div>
+      <div class="feature-text">
+        <strong>Expert Chefs</strong>
+        <span>Authentic recipes daily</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🌱</div>
+      <div class="feature-text">
+        <strong>Fresh Ingredients</strong>
+        <span>Farm to table always</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">💬</div>
+      <div class="feature-text">
+        <strong>WhatsApp Order</strong>
+        <span>Instant confirmation</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POPULAR SECTION -->
+<section class="popular-section">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Fan Favourites</h2>
+      <p class="section-sub">Dishes our regulars can't stop ordering</p>
+    </div>
+    <a href="menu.html" class="view-all-link">View Full Menu →</a>
+  </div>
+  <div class="popular-grid" id="popular-grid"></div>
+</section>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner">
+  <div class="promo-text">
+    <h2>Order Now, Thank Us Later 🎉</h2>
+    <p>Use WhatsApp to place your order in seconds. Fresh food, lightning speed.</p>
+    <a href="trending.html" class="hero-btn-primary" style="display:inline-flex;width:fit-content;">🔥 View Today's Specials</a>
+  </div>
+  <div class="promo-emoji">👨‍🍳</div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="nav-logo-text">FlameBite</span>
+      <p>Mumbai's most loved restaurant bringing authentic flavours to your table since 2020.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Our Menu</a>
+      <a href="trending.html">Most Ordered Today</a>
+      <a href="contact.html">Find Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="tel:9322531740">📞 9322531740</a>
+      <a href="mailto:demo@email.com">✉️ demo@email.com</a>
+      <a href="https://wa.me/919322531740" target="_blank">💬 WhatsApp Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Hours</h4>
+      <a href="#">Mon–Fri: 7AM – 11PM</a>
+      <a href="#">Sat–Sun: 8AM – Midnight</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 FlameBite. All rights reserved. Made with ❤️ in Mumbai.</p>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+// Render popular picks
+const picks = [
+  menuData.lunch[6], menuData.morning[0], menuData.afternoon[13],
+  menuData.lunch[0], menuData.sweets[0], menuData.lunch[10],
+  menuData.afternoon[2], menuData.morning[4]
+];
+
+document.getElementById('popular-grid').innerHTML = picks.map(d => createFoodCard(d)).join('');
+
+// ══ CHEF 3D CANVAS ══
+(function() {
+  const canvas = document.getElementById('chef-canvas');
+  const ctx = canvas.getContext('2d');
+  let t = 0;
+
+  function drawChef(t) {
+    ctx.clearRect(0, 0, 500, 600);
+
+    const bodyY = 20 * Math.sin(t * 0.04);
+    const armSwing = 18 * Math.sin(t * 0.05);
+    const headTilt = 5 * Math.sin(t * 0.03);
+
+    // Shadow
+    ctx.save();
+    ctx.translate(250, 570 + bodyY * 0.3);
+    ctx.scale(1, 0.25);
+    const sg = ctx.createRadialGradient(0, 0, 10, 0, 0, 120);
+    sg.addColorStop(0, 'rgba(255,80,0,0.3)');
+    sg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = sg;
+    ctx.beginPath();
+    ctx.arc(0, 0, 120, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(250, 100 + bodyY);
+
+    // ── HAT ──
+    ctx.save();
+    ctx.rotate(headTilt * Math.PI / 180);
+    // Hat brim
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.ellipse(0, 30, 55, 12, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // Hat body
+    const hatGrad = ctx.createLinearGradient(-40, -60, 40, 30);
+    hatGrad.addColorStop(0, '#ffffff');
+    hatGrad.addColorStop(1, '#e8e8e8');
+    ctx.fillStyle = hatGrad;
+    ctx.beginPath();
+    ctx.moveTo(-40, 30);
+    ctx.bezierCurveTo(-42, -60, 42, -60, 40, 30);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Hat stripe
+    ctx.fillStyle = 'rgba(255,69,0,0.5)';
+    ctx.fillRect(-40, 10, 80, 8);
+    ctx.restore();
+
+    // ── HEAD ──
+    ctx.save();
+    ctx.rotate(headTilt * Math.PI / 180);
+    const skinGrad = ctx.createRadialGradient(-10, 40, 5, 0, 55, 48);
+    skinGrad.addColorStop(0, '#FDDBB4');
+    skinGrad.addColorStop(1, '#F0B080');
+    ctx.fillStyle = skinGrad;
+    ctx.beginPath();
+    ctx.ellipse(0, 60, 46, 50, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Eyes
+    ctx.fillStyle = '#1a1a1a';
+    const blink = Math.sin(t * 0.03) > 0.97 ? 2 : 10;
+    ctx.beginPath();
+    ctx.ellipse(-16, 52, 7, blink, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(16, 52, 7, blink, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // Eye shine
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.beginPath();
+    ctx.arc(-13, 48, 3, 0, Math.PI * 2);
+    ctx.arc(19, 48, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Smile
+    ctx.strokeStyle = '#c0783a';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.arc(0, 64, 22, 0.2, Math.PI - 0.2);
+    ctx.stroke();
+
+    // Cheeks
+    ctx.fillStyle = 'rgba(255,150,100,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(-28, 68, 14, 10, -0.2, 0, Math.PI * 2);
+    ctx.ellipse(28, 68, 14, 10, 0.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // ── NECK ──
+    ctx.fillStyle = '#F0B080';
+    ctx.fillRect(-14, 105, 28, 22);
+
+    // ── BODY ──
+    const bodyGrad = ctx.createLinearGradient(-70, 120, 70, 300);
+    bodyGrad.addColorStop(0, '#ffffff');
+    bodyGrad.addColorStop(1, '#d0d0d0');
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.moveTo(-60, 125);
+    ctx.bezierCurveTo(-65, 200, -55, 290, -50, 330);
+    ctx.lineTo(50, 330);
+    ctx.bezierCurveTo(55, 290, 65, 200, 60, 125);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Buttons
+    for (let i = 0; i < 4; i++) {
+      ctx.fillStyle = 'rgba(255,69,0,0.6)';
+      ctx.beginPath();
+      ctx.arc(0, 160 + i * 30, 5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Collar
+    ctx.fillStyle = '#eeeeee';
+    ctx.beginPath();
+    ctx.moveTo(-30, 122);
+    ctx.lineTo(0, 160);
+    ctx.lineTo(30, 122);
+    ctx.closePath();
+    ctx.fill();
+
+    // ── LEFT ARM (holding ladle) ──
+    ctx.save();
+    ctx.translate(-60, 145);
+    ctx.rotate((-30 + armSwing) * Math.PI / 180);
+    ctx.fillStyle = '#f0f0f0';
+    ctx.beginPath();
+    ctx.ellipse(0, 70, 22, 75, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // hand
+    ctx.fillStyle = '#F0B080';
+    ctx.beginPath();
+    ctx.arc(0, 148, 22, 0, Math.PI * 2);
+    ctx.fill();
+    // ladle
+    ctx.strokeStyle = '#888';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(0, 148);
+    ctx.lineTo(-15, 220);
+    ctx.stroke();
+    ctx.fillStyle = '#aaa';
+    ctx.beginPath();
+    ctx.arc(-22, 230, 16, 0, Math.PI * 2);
+    ctx.fill();
+    // Steam
+    for (let s = 0; s < 3; s++) {
+      ctx.strokeStyle = `rgba(255,150,100,${0.4 - s * 0.1})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const sx = -22 + (s - 1) * 10;
+      const sy = 214 + 5 * Math.sin(t * 0.1 + s);
+      ctx.moveTo(sx, sy);
+      ctx.bezierCurveTo(sx - 10, sy - 20, sx + 10, sy - 40, sx, sy - 60);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // ── RIGHT ARM (waving) ──
+    ctx.save();
+    ctx.translate(60, 145);
+    ctx.rotate((25 - armSwing * 1.4) * Math.PI / 180);
+    ctx.fillStyle = '#f0f0f0';
+    ctx.beginPath();
+    ctx.ellipse(0, 70, 22, 75, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#F0B080';
+    ctx.beginPath();
+    ctx.arc(0, 148, 22, 0, Math.PI * 2);
+    ctx.fill();
+    // Fingers
+    for (let f = 0; f < 4; f++) {
+      const angle = (-30 + f * 20) * Math.PI / 180 + armSwing * 0.05;
+      ctx.fillStyle = '#F0B080';
+      ctx.beginPath();
+      ctx.ellipse(Math.sin(angle) * 20, 148 + Math.cos(angle) * 20, 7, 15, angle, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // ── APRON ──
+    ctx.fillStyle = 'rgba(255,69,0,0.2)';
+    ctx.beginPath();
+    ctx.moveTo(-40, 190);
+    ctx.lineTo(-45, 330);
+    ctx.lineTo(45, 330);
+    ctx.lineTo(40, 190);
+    ctx.closePath();
+    ctx.fill();
+
+    // Apron strings
+    ctx.strokeStyle = 'rgba(255,69,0,0.4)';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(-40, 190);
+    ctx.bezierCurveTo(-60, 175, -30, 160, 0, 165);
+    ctx.bezierCurveTo(30, 160, 60, 175, 40, 190);
+    ctx.stroke();
+  }
+})();
+</script>
+</body>
+</html>
