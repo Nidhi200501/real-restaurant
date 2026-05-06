@@ -301,6 +301,64 @@ body {
 .empty-cart .empty-icon { font-size: 60px; margin-bottom: 16px; }
 .empty-cart p { font-size: 16px; }
 
+/* Profile Dropdown */
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 45px;
+  background: #141622;
+  border: 1px solid #2a2d3e;
+  border-radius: 14px;
+  padding: 10px;
+  width: 190px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  z-index: 999;
+}
+
+/* Buttons */
+.profile-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  color: #ddd;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* Hover effect */
+.profile-item:hover {
+  background: rgba(255,255,255,0.05);
+  color: white;
+}
+
+/* Icons */
+.profile-item .icon {
+  font-size: 16px;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: #2a2d3e;
+  margin: 8px 0;
+}
+
+/* Logout special */
+.profile-item.logout {
+  color: #ff6b6b;
+}
+
+.profile-item.logout:hover {
+  background: rgba(255, 107, 107, 0.1);
+}
+
 /* ══════════════ FOOD CARDS ══════════════ */
 .food-card {
   background: var(--card-bg);

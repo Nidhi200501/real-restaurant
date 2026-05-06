@@ -161,29 +161,6 @@ body {
 }
 .auth-card:hover::before { opacity: 1; }
 
-/* Close button */
-.btn-close {
-  position: absolute;
-  top: 18px; right: 18px;
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.06);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 16px;
-  line-height: 1;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .25s;
-  z-index: 5;
-}
-.btn-close:hover {
-  background: rgba(255,69,0,.18);
-  border-color: var(--border-hot);
-  color: #fff;
-  transform: rotate(90deg) scale(1.1);
-}
-
 /* ═══════════════════════════════════════════
    LOGO
 ═══════════════════════════════════════════ */
@@ -379,6 +356,7 @@ body {
   font-weight: 400;
   outline: none;
   transition: all .3s;
+  appearance: none;
   -webkit-appearance: none;
 }
 
@@ -542,41 +520,6 @@ body {
 .social-icon { font-size: 16px; }
 
 /* ═══════════════════════════════════════════
-   DEMO HINT
-═══════════════════════════════════════════ */
-.demo-hint {
-  margin-top: 20px;
-  padding: 13px 16px;
-  background: rgba(255,179,71,.07);
-  border: 1px solid rgba(255,179,71,.18);
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-.demo-hint-icon { font-size: 16px; flex-shrink: 0; }
-.demo-hint-text { font-size: 12px; color: rgba(255,179,71,.85); line-height: 1.6; }
-.demo-hint-text strong { color: var(--gold); }
-.demo-fill {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: none;
-  border: none;
-  color: var(--gold);
-  font-family: 'Poppins', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  text-decoration-style: dashed;
-  text-underline-offset: 3px;
-  padding: 0;
-  transition: color .2s;
-}
-.demo-fill:hover { color: #ffd580; }
-
-/* ═══════════════════════════════════════════
    FOOTER SWITCH LINK
 ═══════════════════════════════════════════ */
 .switch-link {
@@ -715,9 +658,6 @@ body {
 <!-- ═══ AUTH CARD ═══ -->
 <div class="auth-card" id="authCard" role="dialog" aria-modal="true" aria-label="FlameBite Authentication">
 
-  <!-- Close -->
-  <button class="btn-close" id="btnClose" aria-label="Close" title="Close">✕</button>
-
   <!-- Logo -->
   <div class="logo-wrap">
     <div class="logo-flame" role="img" aria-label="FlameBite logo">🔥</div>
@@ -751,14 +691,14 @@ body {
   <div class="form-panel active" id="panelLogin" role="tabpanel" aria-labelledby="tabLogin">
 
     <div class="field-group">
-      <label class="field-label" for="loginEmail">Email address</label>
+      <label class="field-label" for="loginEmail">Email or Mobile</label>
       <div class="field-wrap">
-        <span class="field-icon" aria-hidden="true">✉️</span>
+        <span class="field-icon" aria-hidden="true">📧</span>
         <input
           class="field-input"
           id="loginEmail"
-          type="email"
-          placeholder="you@example.com"
+          type="text"
+          placeholder="Enter email or Mobile number"
           autocomplete="email"
           spellcheck="false"
         >
@@ -792,40 +732,6 @@ body {
       <span class="btn-label">🔑 &nbsp;Sign In to FlameBite</span>
     </button>
 
-    <div class="divider"><span>or continue with</span></div>
-
-    <div class="social-row">
-      <button class="btn-social" type="button" onclick="handleSocial('Google')" aria-label="Continue with Google">
-        <span class="social-icon">
-          <svg width="16" height="16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 6.5 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.9z"/>
-            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 19 13 24 13c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 7 29.6 4.5 24 4.5 16.3 4.5 9.6 8.7 6.3 14.7z"/>
-            <path fill="#4CAF50" d="M24 44c5.5 0 10.4-2 14.1-5.3l-6.5-5.5C29.5 35 26.9 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.2C9.4 35.4 16.2 44 24 44z"/>
-            <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4-4.1 5.2l6.5 5.5C41.5 36 44 30.4 44 24c0-1.3-.1-2.7-.4-3.9z"/>
-          </svg>
-        </span>
-        Google
-      </button>
-      <button class="btn-social" type="button" onclick="handleSocial('WhatsApp')" aria-label="Continue with WhatsApp">
-        <span class="social-icon">
-          <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#25D366" d="M16 2C8.27 2 2 8.27 2 16c0 2.44.65 4.73 1.77 6.72L2 30l7.5-1.73A13.93 13.93 0 0016 30c7.73 0 14-6.27 14-14S23.73 2 16 2z"/>
-            <path fill="#fff" d="M22 19.7c-.3.8-1.5 1.5-2.2 1.6-.6.1-1.4.1-2.2-.2-1.7-.6-2.9-1.3-4.7-3.1-1.8-1.8-2.5-3-3.1-4.7-.4-.8-.3-1.6-.2-2.2.1-.7.8-1.9 1.6-2.2.4-.1.7-.1 1 0 .3 0 .5.1.7.5l1.3 2.8c.2.3.1.6 0 .8l-.4.5c-.1.1-.2.3-.1.5.5 1.1 1.1 1.8 2.2 2.9 1.1 1 1.8 1.7 2.9 2.2.2.1.4 0 .5-.1l.5-.4c.2-.2.5-.3.8-.1l2.8 1.3c.4.2.5.4.6.7.1.3.1.6 0 1z"/>
-          </svg>
-        </span>
-        WhatsApp
-      </button>
-    </div>
-
-    <!-- Demo hint -->
-    <div class="demo-hint">
-      <span class="demo-hint-icon">💡</span>
-      <div class="demo-hint-text">
-        <strong>Demo Account:</strong><br>
-        <button class="demo-fill" onclick="fillDemo()" type="button">✨ Click to auto-fill demo credentials</button>
-      </div>
-    </div>
-
     <p class="switch-link">
       New here?&nbsp;
       <button type="button" onclick="switchTab('signup')">Create your account</button>
@@ -850,22 +756,27 @@ body {
         </div>
       </div>
       <div class="field-group" style="margin-bottom:0;">
-        <label class="field-label" for="signupPhone">Phone <span style="color:rgba(255,255,255,.25);font-size:10px;">(optional)</span></label>
+        <label class="field-label" for="signupPhone">Phone *</label>
         <div class="field-wrap">
           <span class="field-icon" aria-hidden="true">📱</span>
           <input
             class="field-input"
             id="signupPhone"
             type="tel"
-            placeholder="+91 98765 43210"
+            placeholder="98765 43210"
             autocomplete="tel"
+            maxlength="10"
+            pattern="[0-9]{10}"
+            inputmode="numeric"
+            required
+            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
           >
         </div>
       </div>
     </div>
 
     <div class="field-group" style="margin-top:14px;">
-      <label class="field-label" for="signupEmail">Email address *</label>
+      <label class="field-label" for="signupEmail">Email address (Optional)</label>
       <div class="field-wrap">
         <span class="field-icon" aria-hidden="true">✉️</span>
         <input
@@ -938,7 +849,8 @@ body {
    JAVASCRIPT
 ═══════════════════════════════════════════ -->
 <script>
-'use strict';
+
+const BACKEND_URL = "";
 
 /* ─── SPARKS GENERATOR ─── */
 (function generateSparks() {
@@ -1066,46 +978,6 @@ function updateStrength(val) {
   label.style.color = score <= 1 ? '#f44336' : score <= 3 ? '#FF8C00' : '#4CAF50';
 }
 
-/* ─── CLOSE BUTTON ─── */
-document.getElementById('btnClose').addEventListener('click', () => {
-  const card = document.getElementById('authCard');
-  card.style.transition = 'all .35s cubic-bezier(.4,0,.2,1)';
-  card.style.opacity = '0';
-  card.style.transform = 'translateY(24px) scale(.96)';
-  showToast('👋 See you soon at FlameBite!');
-  setTimeout(() => {
-    // In a real app: window.history.back() or navigate to home
-    card.style.opacity = '1';
-    card.style.transform = 'translateY(0) scale(1)';
-  }, 1800);
-});
-
-/* ─── DEMO FILL ─── */
-function fillDemo() {
-  switchTab('login');
-  setTimeout(() => {
-    const emailEl = document.getElementById('loginEmail');
-    const passEl  = document.getElementById('loginPassword');
-    // Animated typewriter-ish fill
-    typeValue(emailEl, 'demo@flamebite.com', () => {
-      typeValue(passEl, 'Demo@12345', () => {
-        showToast('✨ Demo credentials filled!');
-      });
-    });
-  }, 180);
-}
-
-function typeValue(el, val, cb) {
-  el.value = '';
-  el.focus();
-  let i = 0;
-  const iv = setInterval(() => {
-    el.value += val[i++];
-    el.dispatchEvent(new Event('input'));
-    if (i >= val.length) { clearInterval(iv); cb && cb(); }
-  }, 28);
-}
-
 /* ─── FORGOT PASSWORD ─── */
 function handleForgot(e) {
   e.preventDefault();
@@ -1133,42 +1005,54 @@ function setLoading(btnId, state) {
 /* ─── DO LOGIN ─── */
 async function doLogin() {
   clearFeedback();
-  const email = document.getElementById('loginEmail').value.trim();
+  const identifier = document.getElementById('loginEmail').value.trim();
   const pass  = document.getElementById('loginPassword').value;
 
-  if (!email)               { showError('Please enter your email address.'); return; }
-  if (!validateEmail(email)){ showError('Please enter a valid email address.'); return; }
-  if (!pass)                { showError('Please enter your password.'); return; }
-  if (!validatePassword(pass)){ showError('Password must be at least 6 characters.'); return; }
+  // Check if identifier is email or mobile
+  const isEmail = identifier.includes('@');
+  const isMobile = /^[0-9]{10}$/.test(identifier);
+
+  if (!identifier)               { showError('Please enter your email or mobile number.'); return; }
+  if (!isEmail && !isMobile)     { showError('Please enter a valid email or 10-digit mobile number.'); return; }
+  if (!pass)                     { showError('Please enter your password.'); return; }
+  if (!validatePassword(pass))   { showError('Password must be at least 6 characters.'); return; }
 
   setLoading('btnLogin', true);
 
   try {
-    /* ─ Replace this block with your real API call: ─
-    const res = await fetch('/api/auth/login', {
+    // Call backend API
+    const res = await fetch(`${BACKEND_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password: pass }),
+      body: JSON.stringify({
+      phone: identifier,
+      password: pass
+    }),
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Login failed');
-    localStorage.setItem('fb_token', data.token);
-    localStorage.setItem('fb_user', JSON.stringify(data.user));
-    ─────────────────────────────────────────────── */
+    
+    if (!res.ok) {
+  throw new Error(data.error || 'Login failed');
+}
 
-    // ─── DEMO SIMULATION ───
-    await pause(1100);
-    if (email !== 'demo@flamebite.com' && !email.includes('@')) {
-      throw new Error('Account not found. Try demo@flamebite.com');
-    }
-    // ─────────────────────
+localStorage.setItem('access_token', data.token);
 
     showSuccess('🎉 Welcome back! Redirecting to homepage...');
-    showToast(`🔥 Welcome back, ${email.split('@')[0]}!`);
+    showToast(`🔥 Welcome back!`);
 
     setTimeout(() => {
-      window.location.href = 'index.html';
-    }, 1400);
+
+  // check if user came from order click
+  const redirect = localStorage.getItem("redirectAfterLogin");
+
+  if (redirect) {
+    localStorage.removeItem("redirectAfterLogin");
+    window.location.href = redirect;
+  } else {
+    window.location.href = "index.html";
+  }
+
+}, 1000);
 
   } catch (err) {
     showError(err.message || 'Login failed. Please try again.');
@@ -1187,34 +1071,34 @@ async function doSignup() {
 
   if (!name)                  { showError('Please enter your full name.'); return; }
   if (name.length < 2)        { showError('Name must be at least 2 characters.'); return; }
-  if (!email)                 { showError('Please enter your email address.'); return; }
-  if (!validateEmail(email))  { showError('Please enter a valid email address.'); return; }
+  if (!phone)                 { showError('Please enter your phone number.'); return; }
+  if (!/^[0-9]{10}$/.test(phone)) { showError('Phone number must be exactly 10 digits.'); return; }
   if (!pass)                  { showError('Please enter a password.'); return; }
   if (!validatePassword(pass)){ showError('Password must be at least 6 characters.'); return; }
 
   setLoading('btnSignup', true);
 
   try {
-    /* ─ Replace this block with your real API call: ─
-    const res = await fetch('/api/auth/signup', {
+    // Call backend API
+    const res = await fetch(`${BACKEND_URL}/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password: pass, phone }),
+      body: JSON.stringify({
+      name: name,
+      phone: phone,
+      email: email || null,
+      password: pass
+  }),
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Signup failed');
-    localStorage.setItem('fb_token', data.token);
-    localStorage.setItem('fb_user', JSON.stringify(data.user));
-    ─────────────────────────────────────────────── */
+    
+    if (!res.ok) {
+  throw new Error(data.error || "Signup failed");
+}
 
-    // ─── DEMO SIMULATION ───
-    await pause(1200);
-    if (email === 'taken@flamebite.com') {
-      throw new Error('Email already registered. Please sign in instead.');
-    }
-    // ─────────────────────
-
-    showSuccess(`🎉 Account created! Welcome to FlameBite, ${name.split(' ')[0]}!`);
+showSuccess("Signup successful! Please login.");
+showToast('🔥 Account created successfully!');
+switchTab('login');
     showToast('🔥 Account created successfully!');
 
     // Clear fields
@@ -1223,24 +1107,12 @@ async function doSignup() {
     });
     updateStrength('');
 
-    setTimeout(() => {
-      window.location.href = 'index.html';
-    }, 2000);
-
   } catch (err) {
     showError(err.message || 'Signup failed. Please try again.');
   } finally {
     setLoading('btnSignup', false);
   }
 }
-
-/* ─── UTILITY ─── */
-function pause(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-/* ─── KEYBOARD: Close on Escape ─── */
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') document.getElementById('btnClose').click();
-});
 
 /* ─── ENTER key in login email → focus password ─── */
 document.getElementById('loginEmail').addEventListener('keydown', e => {

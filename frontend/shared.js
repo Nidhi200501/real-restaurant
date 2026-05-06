@@ -160,6 +160,20 @@ function getCartTotal() {
 function getCartCount() {
   return cart.reduce((sum, i) => sum + i.qty, 0);
 }
+function isLoggedIn() {
+  return localStorage.getItem("access_token") !== null;
+}
+
+function handleOrderClick(itemId) {
+  if (!isLoggedIn()) {
+    localStorage.setItem("redirectAfterLogin", window.location.href);
+    window.location.href = "auth.html";
+    return;
+  }
+
+  // future: razorpay
+  alert("Proceed to payment for " + itemId);
+}
 
 function updateCartUI() {
   const count = getCartCount();
@@ -237,6 +251,55 @@ function showToast(msg) {
   }, 2500);
 }
 
+// ===== NAVBAR AUTH UI =====
+
+function updateNavbar() {
+  const token = localStorage.getItem("access_token");
+
+  const loginBtn = document.getElementById("loginBtn");
+  const userMenu = document.getElementById("userMenu");
+
+  if (!loginBtn || !userMenu) return;
+
+  if (token) {
+    loginBtn.style.display = "none";
+    userMenu.style.display = "block";
+  } else {
+    loginBtn.style.display = "block";
+    userMenu.style.display = "none";
+  }
+}
+
+// toggle dropdown
+function toggleUserMenu() {
+  const dropdown = document.getElementById("userDropdown");
+  dropdown.style.display =
+    dropdown.style.display === "block" ? "none" : "block";
+}
+
+// logout
+function logoutUser() {
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("user_info");
+
+  window.location.href = "index.html";
+}
+
+// temporary actions (no page change)
+function goToOrders() {
+  alert("My Orders (will implement later)");
+}
+function goToWishlist() {
+  alert("Wishlist (will implement later)");
+}
+function goToHelp() {
+  alert("Help (will implement later)");
+}
+
+// run when page loads
+window.addEventListener("load", updateNavbar);
+
 // ══════════════ FOOD CARD GENERATOR ══════════════
 function createFoodCard(dish) {
   const isFav = favorites.includes(dish.id);
@@ -258,7 +321,7 @@ function createFoodCard(dish) {
           <div class="card-rating">⭐ ${rating}</div>
         </div>
         <div class="card-actions">
-          <button class="btn-order" onclick="whatsappOrder('${dish.name}')">📱 Order Now</button>
+          <button class="btn-order" onclick="handleOrderClick('${dish.id}')">Order Now</button>
           <button class="btn-cart" onclick='addToCart(${JSON.stringify(dish)})'>🛒 Add</button>
         </div>
       </div>
