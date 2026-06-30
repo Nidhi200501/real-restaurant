@@ -22,3 +22,7 @@ jobs:
 
       - name: Check Python Version
         run: python --version
+        - name: Lint Code
+  run: |
+    cd backend
+    flake8 .
