@@ -7,11 +7,9 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -22,7 +20,13 @@ jobs:
 
       - name: Check Python Version
         run: python --version
-        - name: Lint Code
-  run: |
-    cd backend
-    flake8 .
+
+      - name: Install Dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Lint Code
+        run: |
+          cd backend
+          flake8 .
